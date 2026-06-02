@@ -50,17 +50,9 @@ backward_aicc <- function(model) {
 best_model <- backward_aicc(full_model)
 beta.hat <- coef(best_model)
 
-# ------------------ 3. Create the Submission Function (Factory Method) ------------------
 
-# --- THIS IS THE FINAL, ROBUST FIX ---
-# Define a "factory" or "generator" function.
-# This function takes the necessary data as arguments...
 create_model_matrix_function <- function(means_vec, sds_vec, final_model) {
-  
-  # ...and it returns another function.
-  # This inner function will be our final 'make_model_matrix'.
-  # It automatically remembers the arguments from its parent (means_vec, etc.).
-  force(means_vec); force(sds_vec); force(final_model) # Ensures variables are captured
+  force(means_vec); force(sds_vec); force(final_model) 
   
   function(X.test) {
     new_scaled <- sweep(X.test, 2, means_vec, FUN = "-")
@@ -74,12 +66,7 @@ create_model_matrix_function <- function(means_vec, sds_vec, final_model) {
 
 # Now, call the factory ONE TIME to create our self-contained function
 make_model_matrix <- create_model_matrix_function(means, sds, best_model)
-# --- END OF FIX ---
 
-
-# ------------------ 4. Save the Output File ------------------
-# Save ONLY the two required objects. The 'make_model_matrix' object
-# is now a self-contained closure that holds all the data it needs.
 save(make_model_matrix, beta.hat, file = "230443.Rdata")
 
-cat("\n✅ Final, self-contained submission file '230443.Rdata' created successfully!\n")
+cat("\n Final, self-contained submission file '230443.Rdata' created successfully!\n")
