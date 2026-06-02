@@ -1,5 +1,4 @@
 # ------------------ MTH441: Assignment 1 ------------------
-# Roll number: 230443
 # Uses BIC-based model pruning to minimize test MSE
 
 library(MASS)
@@ -13,7 +12,6 @@ stopifnot("quality" %in% names(data))
 scale_cols <- setdiff(names(data), "quality")
 
 # ------------------ Build full quadratic formula ------------------
-# Includes all main effects, squared terms, and pairwise interactions
 form_full <- as.formula(
   paste("quality ~ (", paste(scale_cols, collapse = " + "), ")^2")
 )
@@ -30,17 +28,13 @@ rhs_formula <- formula(fitt)[-2]  # right-hand side only (drop 'quality ~')
 make_model_matrix <- local({
   f <- rhs_formula  # capture formula inside environment
   function(X.test) {
-    # Ensure input is a data.frame with 12 predictors
     df <- as.data.frame(X.test)
-    # Build model matrix identical to the training model
     X_new <- model.matrix(f, data = df)
     return(X_new)
   }
 })
 
-# ------------------ Save final submission ------------------
 save(make_model_matrix, beta.hat, file = "230443.Rdata")
-cat("\n✅ Successfully saved BIC-optimized self-contained 230443.Rdata\n")
+cat("\n Successfully saved BIC-optimized self-contained 230443.Rdata\n")
 
-# Optional: view model summary (for your own verification)
 summary(fitt)
