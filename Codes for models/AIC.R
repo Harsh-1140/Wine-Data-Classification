@@ -20,8 +20,6 @@ fit_full <- lm(form_full, data = data)
 fitt <- stepAIC(fit_full, trace = FALSE)
 beta.hat <- coef(fitt)
 
-# ------------------ After you finalize fit_final ------------------
-# ------------------ Make the function self-contained ------------------
 rhs_formula <- formula(fitt)[-2]
 
 make_model_matrix <- local({
@@ -33,10 +31,7 @@ make_model_matrix <- local({
 })
 
 save(make_model_matrix, beta.hat, file = "230443.Rdata")
-cat("\n✅ Successfully saved self-contained 230443.Rdata\n")
 
-
-# Optional: summary of the original full model
 summary(fitt)
 
 
